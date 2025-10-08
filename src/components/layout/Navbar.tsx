@@ -1,9 +1,10 @@
-import { Moon, Sun, LogOut, User, Menu, UserCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Moon, Sun, LogOut, User, Menu, KeyRound, Mail } from 'lucide-react';
+import { useState } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
+import { ChangePasswordDialog } from '@/components/profile/ChangePasswordDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +18,7 @@ export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const { toggleSidebar } = useSidebar();
-  const navigate = useNavigate();
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -59,19 +60,33 @@ export const Navbar = () => {
                 <User className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-popover">
+            <DropdownMenuContent align="end" className="w-72 bg-popover">
               <DropdownMenuLabel>
-                <div className="flex flex-col">
-                  <span className="font-medium">{user?.username}</span>
-                  <span className="text-xs text-muted-foreground capitalize">
-                    {user?.role}
-                  </span>
+                <div className="flex flex-col space-y-3 py-2">
+                  <div className="flex items-center gap-3">
+                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <User className="h-6 w-6 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-semibold text-base">{user?.username}</div>
+                      <div className="text-xs text-muted-foreground capitalize flex items-center gap-1 mt-0.5">
+                        {user?.role}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Mail className="h-3.5 w-3.5" />
+                    <span className="truncate">{user?.email}</span>
+                  </div>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
-                <UserCircle className="mr-2 h-4 w-4" />
-                <span>Profile</span>
+              <DropdownMenuItem 
+                onClick={() => setChangePasswordOpen(true)} 
+                className="cursor-pointer"
+              >
+                <KeyRound className="mr-2 h-4 w-4" />
+                <span>Change Password</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={logout} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
@@ -81,6 +96,11 @@ export const Navbar = () => {
           </DropdownMenu>
         </div>
       </div>
+      
+      <ChangePasswordDialog 
+        open={changePasswordOpen} 
+        onOpenChange={setChangePasswordOpen} 
+      />
     </nav>
   );
 };
