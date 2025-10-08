@@ -1,4 +1,5 @@
-import { Moon, Sun, LogOut, User, Menu } from 'lucide-react';
+import { Moon, Sun, LogOut, User, Menu, UserCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,6 +17,7 @@ export const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const { toggleSidebar } = useSidebar();
+  const navigate = useNavigate();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -67,6 +69,10 @@ export const Navbar = () => {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                <UserCircle className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={logout} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Logout</span>
