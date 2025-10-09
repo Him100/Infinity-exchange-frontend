@@ -62,6 +62,38 @@ const menuItems: MenuItem[] = [
     roles: ['superadmin', 'admin', 'master', 'superagent', 'agent', 'client'],
   },
   {
+    title: 'Users',
+    icon: Users,
+    roles: ['superadmin'],
+    subItems: [
+      {
+        title: 'Admins',
+        url: '/users/admins',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Masters',
+        url: '/users/masters',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Super Agents',
+        url: '/users/superagents',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Agents',
+        url: '/users/agents',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Clients',
+        url: '/users/clients',
+        roles: ['superadmin'],
+      },
+    ],
+  },
+  {
     title: 'Master Details',
     icon: UserCog,
     roles: ['superadmin', 'admin', 'master', 'superagent', 'agent'],
