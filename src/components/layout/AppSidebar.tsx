@@ -99,6 +99,16 @@ const menuItems: MenuItem[] = [
     roles: ['superadmin', 'admin', 'master', 'superagent', 'agent'],
     subItems: [
       {
+        title: 'Admin',
+        url: '/master-details/admin',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Master',
+        url: '/master-details/master',
+        roles: ['superadmin'],
+      },
+      {
         title: 'Super Agent Master',
         url: '/master-details/super-agent',
         roles: ['superadmin', 'admin'],
@@ -182,6 +192,16 @@ const menuItems: MenuItem[] = [
         roles: ['superadmin', 'admin', 'master', 'superagent', 'agent', 'client'],
       },
       {
+        title: 'Admin Ledger',
+        url: '/ledger/admin',
+        roles: ['superadmin'],
+      },
+      {
+        title: 'Master Ledger',
+        url: '/ledger/master',
+        roles: ['superadmin'],
+      },
+      {
         title: 'Super Agent Ledger',
         url: '/ledger/super-agent',
         roles: ['superadmin', 'admin'],
@@ -203,6 +223,16 @@ const menuItems: MenuItem[] = [
     icon: DollarSign,
     roles: ['superadmin', 'admin', 'superagent', 'agent'],
     subItems: [
+      {
+        title: '(AD) Debit/Credit Entry',
+        url: '/cash-transaction/admin',
+        roles: ['superadmin'],
+      },
+      {
+        title: '(M) Debit/Credit Entry',
+        url: '/cash-transaction/master',
+        roles: ['superadmin'],
+      },
       {
         title: '(C) Debit/Credit Entry',
         url: '/cash-transaction/client',
