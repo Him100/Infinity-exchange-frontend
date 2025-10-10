@@ -36,7 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       id: '1',
       username,
       email: `${username}@betting.app`,
-      role: 'admin' as UserRole, // This would come from API
+      role: 'superadmin' as UserRole, // Assigned superadmin role
       createdAt: new Date(),
     };
 

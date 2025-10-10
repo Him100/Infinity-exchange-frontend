@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Lock, User, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Lock, User, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const LoginForm = () => {
@@ -15,8 +15,28 @@ export const LoginForm = () => {
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'credentials' | 'otp'>('credentials');
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(90);
+  const [isTimerActive, setIsTimerActive] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  // Countdown timer for OTP
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isTimerActive && timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    } else if (timer === 0) {
+      toast.error('OTP expired. Please request a new one.');
+      setOtp('');
+    }
+
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isTimerActive, timer]);
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,8 +46,10 @@ export const LoginForm = () => {
       // Simulate API call to verify credentials and send OTP
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      toast.success('OTP sent successfully!');
+      toast.success('OTP sent successfully! Valid for 90 seconds.');
       setStep('otp');
+      setTimer(90);
+      setIsTimerActive(true);
     } catch (error) {
       toast.error('Invalid credentials. Please try again.');
     } finally {
@@ -43,15 +65,23 @@ export const LoginForm = () => {
       return;
     }
 
+    if (timer === 0) {
+      toast.error('OTP has expired. Please request a new one.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       // Simulate OTP verification
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Proceed with actual login
+      // Stop the timer
+      setIsTimerActive(false);
+      
+      // Proceed with actual login (superadmin role will be assigned)
       await login(userId, password);
-      toast.success('Login successful!');
+      toast.success('Login successful! Welcome Super Admin.');
       navigate('/dashboard');
     } catch (error) {
       toast.error('Invalid OTP. Please try again.');
@@ -61,9 +91,30 @@ export const LoginForm = () => {
     }
   };
 
+  const handleResendOtp = async () => {
+    try {
+      // Simulate resending OTP
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      toast.success('New OTP sent successfully!');
+      setTimer(90);
+      setIsTimerActive(true);
+      setOtp('');
+    } catch (error) {
+      toast.error('Failed to resend OTP. Please try again.');
+    }
+  };
+
   const handleEditCredentials = () => {
     setStep('credentials');
     setOtp('');
+    setTimer(90);
+    setIsTimerActive(false);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -145,15 +196,24 @@ export const LoginForm = () => {
               </div>
 
               <div className="space-y-3">
-                <Label htmlFor="otp" className="text-sm font-semibold flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4" />
-                  Enter OTP
-                </Label>
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="otp" className="text-sm font-semibold flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4" />
+                    Enter OTP
+                  </Label>
+                  <div className={`flex items-center gap-1.5 text-sm font-semibold ${
+                    timer <= 30 ? 'text-destructive' : 'text-primary'
+                  }`}>
+                    <Clock className="h-4 w-4" />
+                    {formatTime(timer)}
+                  </div>
+                </div>
                 <div className="flex justify-center">
                   <InputOTP
                     maxLength={6}
                     value={otp}
                     onChange={setOtp}
+                    disabled={timer === 0}
                   >
                     <InputOTPGroup>
                       <InputOTPSlot index={0} />
@@ -166,7 +226,14 @@ export const LoginForm = () => {
                   </InputOTP>
                 </div>
                 <p className="text-xs text-center text-muted-foreground">
-                  Didn't receive the code? <button type="button" className="text-primary hover:underline font-medium">Resend</button>
+                  Didn't receive the code? <button 
+                    type="button" 
+                    onClick={handleResendOtp}
+                    className="text-primary hover:underline font-medium"
+                    disabled={timer > 60}
+                  >
+                    Resend
+                  </button>
                 </p>
               </div>
             </div>
@@ -174,10 +241,16 @@ export const LoginForm = () => {
             <Button
               type="submit"
               className="w-full h-11 text-base font-semibold"
-              disabled={loading || otp.length !== 6}
+              disabled={loading || otp.length !== 6 || timer === 0}
             >
               {loading ? 'Verifying OTP...' : 'Submit OTP'}
             </Button>
+            
+            {timer === 0 && (
+              <p className="text-sm text-center text-destructive font-medium">
+                OTP expired. Please click resend to get a new code.
+              </p>
+            )}
           </form>
         )}
       </CardContent>
