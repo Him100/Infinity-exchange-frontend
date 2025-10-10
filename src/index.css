@@ -8,57 +8,58 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Light theme (optional secondary theme) */
-    --background: 210 20% 98%;
-    --foreground: 220 25% 12%;
+    /* Light theme - Modern and vibrant color scheme */
+    --background: 220 25% 97%;
+    --foreground: 220 30% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 25% 12%;
+    --card-foreground: 220 30% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 12%;
+    --popover-foreground: 220 30% 15%;
 
-    --primary: 210 85% 55%;
+    --primary: 220 90% 56%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 94%;
-    --secondary-foreground: 220 25% 12%;
+    --secondary: 220 15% 92%;
+    --secondary-foreground: 220 30% 20%;
 
-    --muted: 210 20% 94%;
-    --muted-foreground: 220 15% 45%;
+    --muted: 220 15% 95%;
+    --muted-foreground: 220 15% 40%;
 
-    --accent: 145 65% 50%;
+    --accent: 270 75% 60%;
     --accent-foreground: 0 0% 100%;
 
-    --success: 145 65% 50%;
+    --success: 145 65% 45%;
     --success-foreground: 0 0% 100%;
 
-    --warning: 45 95% 55%;
-    --warning-foreground: 220 25% 12%;
+    --warning: 40 95% 50%;
+    --warning-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 55%;
+    --destructive: 0 70% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 88%;
-    --input: 220 13% 88%;
-    --ring: 210 85% 55%;
+    --border: 220 15% 88%;
+    --input: 220 15% 90%;
+    --ring: 220 90% 56%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 12%;
-    --sidebar-primary: 210 85% 55%;
+    /* Sidebar with distinct color scheme for light theme */
+    --sidebar-background: 220 40% 16%;
+    --sidebar-foreground: 220 15% 95%;
+    --sidebar-primary: 220 90% 56%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 20% 94%;
-    --sidebar-accent-foreground: 220 25% 12%;
-    --sidebar-border: 220 13% 88%;
-    --sidebar-ring: 210 85% 55%;
+    --sidebar-accent: 220 30% 22%;
+    --sidebar-accent-foreground: 220 15% 95%;
+    --sidebar-border: 220 25% 25%;
+    --sidebar-ring: 220 90% 56%;
 
     /* Premium betting colors */
-    --win-green: 145 65% 50%;
-    --loss-red: 0 70% 55%;
-    --highlight-gold: 45 95% 55%;
-    --odds-blue: 210 85% 55%;
+    --win-green: 145 65% 45%;
+    --loss-red: 0 70% 50%;
+    --highlight-gold: 40 95% 50%;
+    --odds-blue: 220 90% 56%;
   }
 
   .dark {
