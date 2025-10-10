@@ -176,71 +176,80 @@ export const LoginForm = () => {
             </Button>
           </form>
         ) : (
-          <form onSubmit={handleOtpSubmit} className="space-y-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-muted/50 border border-border/50">
-                <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">User ID: {userId}</p>
-                  <p className="text-xs text-muted-foreground">Credentials verified</p>
-                </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleEditCredentials}
-                  className="text-xs"
-                >
-                  Edit
-                </Button>
+          <form onSubmit={handleOtpSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="userId-readonly" className="text-sm font-semibold">User ID</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="userId-readonly"
+                  type="text"
+                  value={userId}
+                  className="pl-10 h-11 text-base bg-muted/50"
+                  readOnly
+                />
               </div>
+            </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="otp" className="text-sm font-semibold flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4" />
-                    Enter OTP
-                  </Label>
-                  <div className={`flex items-center gap-1.5 text-sm font-semibold ${
-                    timer <= 30 ? 'text-destructive' : 'text-primary'
-                  }`}>
-                    <Clock className="h-4 w-4" />
-                    {formatTime(timer)}
-                  </div>
-                </div>
-                <div className="flex justify-center">
-                  <InputOTP
-                    maxLength={6}
-                    value={otp}
-                    onChange={setOtp}
-                    disabled={timer === 0}
-                  >
-                    <InputOTPGroup>
-                      <InputOTPSlot index={0} />
-                      <InputOTPSlot index={1} />
-                      <InputOTPSlot index={2} />
-                      <InputOTPSlot index={3} />
-                      <InputOTPSlot index={4} />
-                      <InputOTPSlot index={5} />
-                    </InputOTPGroup>
-                  </InputOTP>
-                </div>
-                <p className="text-xs text-center text-muted-foreground">
-                  Didn't receive the code? <button 
-                    type="button" 
-                    onClick={handleResendOtp}
-                    className="text-primary hover:underline font-medium"
-                    disabled={timer > 60}
-                  >
-                    Resend
-                  </button>
-                </p>
+            <div className="space-y-2">
+              <Label htmlFor="password-readonly" className="text-sm font-semibold">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="password-readonly"
+                  type="password"
+                  value={password}
+                  className="pl-10 h-11 text-base bg-muted/50"
+                  readOnly
+                />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="otp" className="text-sm font-semibold flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4" />
+                  Enter OTP
+                </Label>
+                <div className={`flex items-center gap-1.5 text-sm font-semibold ${
+                  timer <= 30 ? 'text-destructive' : 'text-primary'
+                }`}>
+                  <Clock className="h-4 w-4" />
+                  {formatTime(timer)}
+                </div>
+              </div>
+              <div className="flex justify-center">
+                <InputOTP
+                  maxLength={6}
+                  value={otp}
+                  onChange={setOtp}
+                  disabled={timer === 0}
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+              <p className="text-xs text-center text-muted-foreground">
+                Didn't receive the code? <button 
+                  type="button" 
+                  onClick={handleResendOtp}
+                  className="text-primary hover:underline font-medium"
+                  disabled={timer > 60}
+                >
+                  Resend
+                </button>
+              </p>
             </div>
 
             <Button
               type="submit"
-              className="w-full h-11 text-base font-semibold"
+              className="w-full h-11 text-base font-semibold mt-6"
               disabled={loading || otp.length !== 6 || timer === 0}
             >
               {loading ? 'Verifying OTP...' : 'Submit OTP'}
