@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User, AuthState, UserRole } from '@/types';
+import { User, AuthState } from '@/types';
 
 interface AuthContextType extends AuthState {
-  login: (username: string, password: string) => Promise<void>;
+  login: (token: string, user: User) => void;
   logout: () => void;
 }
 
@@ -29,26 +29,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (username: string, password: string) => {
-    // TODO: Replace with actual API call
-    // Simulating login for demo purposes
-    const mockUser: User = {
-      id: '1',
-      username,
-      email: `${username}@betting.app`,
-      role: 'superadmin' as UserRole, // Assigned superadmin role
-      createdAt: new Date(),
-    };
-
-    const mockToken = 'mock-jwt-token';
-
-    localStorage.setItem('user', JSON.stringify(mockUser));
-    localStorage.setItem('token', mockToken);
+  const login = (token: string, user: User) => {
+    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', token);
 
     setAuthState({
-      user: mockUser,
+      user,
       isAuthenticated: true,
-      token: mockToken,
+      token,
     });
   };
 

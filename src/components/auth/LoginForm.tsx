@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { authService } from '@/services/auth.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
-import { Lock, User, ShieldCheck, CheckCircle2, Clock } from 'lucide-react';
+import { Lock, User, ShieldCheck, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const LoginForm = () => {
@@ -43,10 +44,14 @@ export const LoginForm = () => {
     setLoading(true);
 
     try {
-      // Simulate API call to verify credentials and send OTP
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await authService.verifyCredentials(userId, password);
       
-      toast.success('OTP sent successfully! Valid for 90 seconds.');
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+      
+      toast.success(response.data?.message || 'OTP sent successfully! Valid for 90 seconds.');
       setStep('otp');
       setTimer(90);
       setIsTimerActive(true);
@@ -73,16 +78,23 @@ export const LoginForm = () => {
     setLoading(true);
 
     try {
-      // Simulate OTP verification
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await authService.verifyOtp(userId, password, otp);
       
-      // Stop the timer
-      setIsTimerActive(false);
-      
-      // Proceed with actual login (superadmin role will be assigned)
-      await login(userId, password);
-      toast.success('Login successful! Welcome Super Admin.');
-      navigate('/dashboard');
+      if (response.error) {
+        toast.error(response.error);
+        setOtp('');
+        return;
+      }
+
+      if (response.data) {
+        // Stop the timer
+        setIsTimerActive(false);
+        
+        // Login with JWT token and user data from backend
+        login(response.data.token, response.data.user);
+        toast.success(`Login successful! Welcome ${response.data.user.role}.`);
+        navigate('/dashboard');
+      }
     } catch (error) {
       toast.error('Invalid OTP. Please try again.');
       setOtp('');
@@ -93,9 +105,14 @@ export const LoginForm = () => {
 
   const handleResendOtp = async () => {
     try {
-      // Simulate resending OTP
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      toast.success('New OTP sent successfully!');
+      const response = await authService.resendOtp(userId, password);
+      
+      if (response.error) {
+        toast.error(response.error);
+        return;
+      }
+      
+      toast.success(response.data?.message || 'New OTP sent successfully!');
       setTimer(90);
       setIsTimerActive(true);
       setOtp('');
