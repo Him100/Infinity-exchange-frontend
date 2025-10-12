@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { authService } from '@/services/auth.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,6 +13,7 @@ export const LoginForm = () => {
   const [userId, setUserId] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleCredentialsSubmit = async (e: React.FormEvent) => {
@@ -26,12 +28,19 @@ export const LoginForm = () => {
         return;
       }
       
-      toast.success(response.data?.message || 'OTP sent successfully! Valid for 90 seconds.');
-      
-      // Redirect to OTP verification page with credentials
-      navigate('/verify-otp', { 
-        state: { userId, password }
-      });
+      // Check if user can login directly (candidate without OTP)
+      if (response.data?.token && response.data?.user) {
+        // Direct login without OTP
+        login(response.data.token, response.data.user);
+        toast.success(`Login successful! Welcome ${response.data.user.role}.`);
+        navigate('/dashboard');
+      } else {
+        // OTP required for other roles
+        toast.success(response.data?.message || 'OTP sent successfully! Valid for 90 seconds.');
+        navigate('/verify-otp', { 
+          state: { userId, password }
+        });
+      }
     } catch (error) {
       toast.error('Invalid credentials. Please try again.');
     } finally {

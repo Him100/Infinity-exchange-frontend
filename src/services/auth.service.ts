@@ -3,8 +3,11 @@ import { API_ENDPOINTS } from '@/config/api';
 import { User } from '@/types';
 
 interface VerifyCredentialsResponse {
-  message: string;
-  userId: string;
+  message?: string;
+  userId?: string;
+  token?: string;
+  user?: User;
+  requiresOtp?: boolean;
 }
 
 interface VerifyOtpResponse {
