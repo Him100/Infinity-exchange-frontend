@@ -35,6 +35,7 @@ export const Navbar = () => {
           </Button>
           <div className="flex items-center gap-3">
             <img src={logo} alt="Infinity Exchange" className="h-10 w-auto" />
+            <span className="text-xl font-bold text-foreground">Infinity Exchange</span>
           </div>
         </div>
 
