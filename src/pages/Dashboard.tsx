@@ -11,17 +11,17 @@ const Dashboard = () => {
 
   const renderDashboard = () => {
     switch (user?.role) {
-      case 'superadmin':
+      case 'SUPERADMIN':
         return <SuperAdminDashboard />;
-      case 'admin':
+      case 'ADMIN':
         return <AdminDashboard />;
-      case 'master':
+      case 'MASTER':
         return <MasterDashboard />;
-      case 'superagent':
+      case 'SUPERAGENT':
         return <SuperAgentDashboard />;
-      case 'agent':
+      case 'AGENT':
         return <AgentDashboard />;
-      case 'client':
+      case 'CLIENT':
         return <ClientDashboard />;
       default:
         return (

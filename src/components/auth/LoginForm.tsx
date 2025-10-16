@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { authService } from '@/services/auth.service';
+import { AuthService } from '@/services/auth.service';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -16,37 +16,40 @@ export const LoginForm = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleCredentialsSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+const handleCredentialsSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
 
-    try {
-      const response = await authService.verifyCredentials(userId, password);
-      
-      if (response.error) {
-        toast.error(response.error);
-        return;
-      }
-      
-      // Check if user can login directly (candidate without OTP)
-      if (response.data?.token && response.data?.user) {
-        // Direct login without OTP
-        login(response.data.token, response.data.user);
-        toast.success(`Login successful! Welcome ${response.data.user.role}.`);
-        navigate('/dashboard');
-      } else {
-        // OTP required for other roles
-        toast.success(response.data?.message || 'OTP sent successfully! Valid for 90 seconds.');
-        navigate('/verify-otp', { 
-          state: { userId, password }
-        });
-      }
-    } catch (error) {
-      toast.error('Invalid credentials. Please try again.');
-    } finally {
-      setLoading(false);
+  try {
+    const response = await new AuthService().verifyCredentials(userId, password);
+    
+    // Handle errors
+    if (response.error) {
+      toast.error(response.error);
+      return;
     }
-  };
+    
+    if (response.token && response.user) {
+      login(response.token, response.user);
+      navigate('/dashboard');
+    }
+    
+    if (response.requiresOtp || response.message?.includes('OTP')) {
+      navigate('/verify-otp', { 
+        state: { userId, password }  // Preserves credentials
+      });
+    }
+        
+    // If we get here, something unexpected happened
+    toast.error('Unexpected response from server');
+    
+  } catch (error) {
+    console.error('Login error:', error);
+    toast.error('Login failed. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
 
 
   return (
@@ -101,7 +104,7 @@ export const LoginForm = () => {
             className="w-full h-11 text-base font-semibold mt-6"
             disabled={loading}
           >
-            {loading ? 'Verifying...' : 'Continue'}
+            {loading ? 'Verifying...' : 'Submit'}
           </Button>
         </form>
       </CardContent>

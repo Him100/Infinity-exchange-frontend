@@ -8,9 +8,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import { DashboardLayout } from "./components/layout/DashboardLayout";
 import Login from "./pages/Login";
-import VerifyOtp from "./pages/VerifyOtp";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import { VerifyOtp } from "./components/auth/VerifyOtp";
 
 const queryClient = new QueryClient();
 
@@ -25,8 +25,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Navigate to="/login" replace />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/verify-otp" element={<VerifyOtp />} />
-              
+              <Route path="/verify-otp" element={<VerifyOtp/>} />
+
               <Route
                 path="/"
                 element={

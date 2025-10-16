@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { User, Lock } from 'lucide-react';
+import { AuthService } from '@/services/auth.service';
 
 const Profile = () => {
   const { user } = useAuth();
@@ -17,7 +18,12 @@ const Profile = () => {
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
+    console.log('FRONTEND DEBUG: Starting password change');
+    console.log('FRONTEND DEBUG: Current password length:', currentPassword.length);
+    console.log('FRONTEND DEBUG: New password length:', newPassword.length);
+    console.log('FRONTEND DEBUG: Confirm password length:', confirmPassword.length);
+
     if (newPassword !== confirmPassword) {
       toast({
         title: 'Error',
@@ -37,18 +43,50 @@ const Profile = () => {
     }
 
     setIsLoading(true);
-    
-    // TODO: Implement actual password change with API
-    setTimeout(() => {
-      setIsLoading(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      toast({
-        title: 'Success',
-        description: 'Password changed successfully',
+    console.log('FRONTEND DEBUG: Set loading to true, calling AuthService');
+
+    try {
+      const response = await new AuthService().changePassword({
+        currentPassword,
+        newPassword,
+        confirmPassword
       });
-    }, 1000);
+
+      console.log('FRONTEND DEBUG: AuthService response:', response);
+
+      if (response.error) {
+        console.log('FRONTEND DEBUG: Got error response:', response.error);
+        toast({
+          title: 'Error',
+          description: response.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (response.message) {
+        console.log('FRONTEND DEBUG: Got success response:', response.message);
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        toast({
+          title: 'Success',
+          description: response.message,
+        });
+      } else {
+        console.log('FRONTEND DEBUG: No message in response:', response);
+      }
+    } catch (error) {
+      console.error('FRONTEND DEBUG: Exception caught:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to change password. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      console.log('FRONTEND DEBUG: Set loading to false');
+      setIsLoading(false);
+    }
   };
 
   return (

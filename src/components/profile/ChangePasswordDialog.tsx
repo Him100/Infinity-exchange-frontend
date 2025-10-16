@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { AuthService } from '@/services/auth.service';
 
 interface ChangePasswordDialogProps {
   open: boolean;
@@ -23,41 +24,96 @@ export const ChangePasswordDialog = ({ open, onOpenChange }: ChangePasswordDialo
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (newPassword !== confirmPassword) {
+  const validateForm = () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
       toast({
         title: 'Error',
-        description: 'New passwords do not match',
+        description: 'Please fill in all fields',
         variant: 'destructive',
       });
-      return;
+      return false;
     }
 
     if (newPassword.length < 6) {
       toast({
         title: 'Error',
-        description: 'Password must be at least 6 characters',
+        description: 'New password must be at least 6 characters long',
         variant: 'destructive',
       });
+      return false;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast({
+        title: 'Error',
+        description: 'New password and confirm password do not match',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    if (currentPassword === newPassword) {
+      toast({
+        title: 'Error',
+        description: 'New password must be different from current password',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       return;
     }
 
     setIsLoading(true);
-    
-    // TODO: Implement actual password change with API
-    setTimeout(() => {
-      setIsLoading(false);
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-      onOpenChange(false);
-      toast({
-        title: 'Success',
-        description: 'Password changed successfully',
+
+    try {
+      const response = await new AuthService().changePassword({
+        currentPassword,
+        newPassword,
+        confirmPassword
       });
-    }, 1000);
+
+      if (response.error) {
+        toast({
+          title: 'Error',
+          description: response.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (response.message) {
+        // Clear form
+        setCurrentPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+
+        // Close dialog
+        onOpenChange(false);
+
+        // Show success message
+        toast({
+          title: 'Success',
+          description: response.message,
+        });
+      }
+    } catch (error) {
+      console.error('Change password error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to change password. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
