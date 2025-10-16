@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ArrowLeft } from 'lucide-react';
+import logo from '@/assets/logo.png';
 
 export const VerifyOtp = () => {
   const [otp, setOtp] = useState('');
@@ -57,24 +58,23 @@ export const VerifyOtp = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
       <Card className="w-full max-w-md shadow-2xl border-border/50 backdrop-blur-sm">
         <CardHeader className="space-y-3">
-          <div className="flex items-center space-x-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleBack}
-              className="p-2 h-auto mb-5"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <div className="flex-1 text-center">
-              <CardTitle className="text-3xl font-bold">
-                Enter OTP
-              </CardTitle>
-              <CardDescription className="text-base">
-                Enter the 6-digit OTP sent to your account
-              </CardDescription>
-            </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleBack}
+            className="absolute top-4 left-4"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex justify-center mb-2">
+            <img src={logo} alt="Infinity Exchange" className="h-20 w-auto" />
           </div>
+          <CardTitle className="text-3xl font-bold text-center">
+            Enter OTP
+          </CardTitle>
+          <CardDescription className="text-center text-base">
+            Enter the 6-digit OTP sent to your account
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleOtpSubmit} className="space-y-5">

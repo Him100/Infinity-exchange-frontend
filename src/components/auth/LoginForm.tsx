@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
+import logo from '@/assets/logo.png';
 
 export const LoginForm = () => {
   const [userId, setUserId] = useState('');
@@ -56,12 +57,10 @@ const handleCredentialsSubmit = async (e: React.FormEvent) => {
     <Card className="w-full max-w-md shadow-2xl border-border/50 backdrop-blur-sm">
       <CardHeader className="space-y-3">
         <div className="flex justify-center mb-2">
-          <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg">
-            <span className="text-primary-foreground font-bold text-4xl">B</span>
-          </div>
+          <img src={logo} alt="Infinity Exchange" className="h-24 w-auto" />
         </div>
         <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-          Welcome to BetPro
+          Welcome to Infinity Exchange
         </CardTitle>
         <CardDescription className="text-center text-base">
           Enter your credentials to continue

@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ChangePasswordDialog } from '@/components/profile/ChangePasswordDialog';
+import logo from '@/assets/logo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,11 +33,8 @@ export const Navbar = () => {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">B</span>
-            </div>
-            <h1 className="text-xl font-bold text-foreground">BetPro</h1>
+          <div className="flex items-center gap-3">
+            <img src={logo} alt="Infinity Exchange" className="h-10 w-auto" />
           </div>
         </div>
 
