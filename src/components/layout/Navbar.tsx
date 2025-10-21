@@ -1,10 +1,12 @@
 import { Moon, Sun, LogOut, User, Menu, KeyRound, Mail } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/components/ui/sidebar';
 import { ChangePasswordDialog } from '@/components/profile/ChangePasswordDialog';
+import { toast } from 'sonner';
 import logo from '@/assets/logo.png';
 import {
   DropdownMenu,
@@ -20,6 +22,18 @@ export const Navbar = () => {
   const { user, logout } = useAuth();
   const { toggleSidebar } = useSidebar();
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      toast.success('Logged out successfully');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error(error instanceof Error ? error.message : 'Logout failed. Please try again.');
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 h-16 border-b border-border bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80">
@@ -87,7 +101,7 @@ export const Navbar = () => {
                 <KeyRound className="mr-2 h-4 w-4" />
                 <span>Change Password</span>
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={logout} className="cursor-pointer">
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Logout</span>
               </DropdownMenuItem>

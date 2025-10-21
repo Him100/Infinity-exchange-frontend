@@ -112,4 +112,37 @@ export class AuthService {
       return { error: 'Network error during password change.' };
     }
   }
+
+  async logout(): Promise<AuthResponse> {
+    try {
+      // Get the auth token from localStorage
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        return { error: 'No authentication token found. Already logged out.' };
+      }
+
+      const response = await fetch(`${API_BASE_URL}${API_ENDPOINTS.AUTH.LOGOUT}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        return {
+          error: data.error || `HTTP ${response.status}: ${response.statusText}`
+        };
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Even if the API call fails, we should still log out locally
+      return { message: 'Logged out locally. Server error occurred.' };
+    }
+  }
 }
