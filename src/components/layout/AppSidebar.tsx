@@ -12,7 +12,7 @@ import {
   Wallet,
   FileText,
   ChevronDown,
-  DollarSign,
+  IndianRupee,
   Gamepad2,
   Dices,
   Shield,
@@ -220,7 +220,7 @@ const menuItems: MenuItem[] = [
   },
   {
     title: 'Cash Transaction',
-    icon: DollarSign,
+    icon: IndianRupee,
     roles: ['SUPERADMIN', 'ADMIN', 'SUPERAGENT', 'AGENT'],
     subItems: [
       {
@@ -333,7 +333,16 @@ export const AppSidebar = () => {
   };
 
   const toggleMenu = (title: string) => {
-    setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));
+    setOpenMenus(prev => {
+      const isCurrentlyOpen = prev[title];
+      // Close all menus first, then open the clicked one if it was closed
+      const newState: Record<string, boolean> = {};
+      Object.keys(prev).forEach(key => {
+        newState[key] = false;
+      });
+      newState[title] = !isCurrentlyOpen;
+      return newState;
+    });
   };
 
   return (
