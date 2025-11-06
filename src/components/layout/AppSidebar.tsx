@@ -317,7 +317,7 @@ const menuItems: MenuItem[] = [
 
 export const AppSidebar = () => {
   const { user } = useAuth();
-  const { state } = useSidebar();
+  const { state, setOpen } = useSidebar();
   const collapsed = state === 'collapsed';
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
@@ -333,7 +333,15 @@ export const AppSidebar = () => {
   };
 
   const toggleMenu = (title: string) => {
-    setOpenMenus(prev => ({ ...prev, [title]: !prev[title] }));
+    setOpenMenus(prev => {
+      const isCurrentlyOpen = prev[title];
+      // Close all menus and toggle only the clicked one
+      return { [title]: !isCurrentlyOpen };
+    });
+  };
+
+  const handleMenuItemClick = () => {
+    setOpen(false);
   };
 
   return (
@@ -379,6 +387,7 @@ export const AppSidebar = () => {
                                   <SidebarMenuSubButton asChild>
                                     <NavLink
                                       to={subItem.url}
+                                      onClick={handleMenuItemClick}
                                       className={({ isActive }) =>
                                         isActive
                                           ? 'bg-accent text-accent-foreground font-medium'
@@ -403,6 +412,7 @@ export const AppSidebar = () => {
                     <SidebarMenuButton asChild>
                       <NavLink
                         to={item.url || '#'}
+                        onClick={handleMenuItemClick}
                         className={({ isActive }) =>
                           isActive
                             ? 'bg-accent text-accent-foreground font-medium'
