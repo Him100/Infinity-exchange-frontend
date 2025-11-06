@@ -369,7 +369,7 @@ export const AppSidebar = () => {
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
-                            className={collapsed ? 'justify-center text-sidebar-foreground' : 'text-sidebar-foreground'}
+                            className={collapsed ? 'justify-center text-sidebar-foreground hover:text-accent-foreground' : 'text-sidebar-foreground hover:text-accent-foreground'}
                           >
                             <item.icon className="h-5 w-5" />
                             {!collapsed && (
@@ -391,7 +391,7 @@ export const AppSidebar = () => {
                                       className={({ isActive }) =>
                                         isActive
                                           ? 'bg-accent text-accent-foreground font-medium'
-                                          : 'hover:bg-accent/50'
+                                          : 'text-sidebar-foreground hover:bg-accent/50 hover:text-accent-foreground'
                                       }
                                     >
                                       <span>{subItem.title}</span>
