@@ -16,7 +16,7 @@ import {
   Gamepad2,
   Dices,
   Shield,
-  Receipt,
+  PieChart,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/types';
@@ -270,7 +270,7 @@ const menuItems: MenuItem[] = [
   {
     title: 'Comm. Report',
     url: '/comm-report',
-    icon: Receipt,
+    icon: PieChart,
     roles: ['SUPERADMIN', 'ADMIN', 'MASTER', 'SUPERAGENT', 'AGENT','CLIENT'],
   },
   {
@@ -369,7 +369,7 @@ export const AppSidebar = () => {
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton
-                            className={collapsed ? 'justify-center' : ''}
+                            className={collapsed ? 'justify-center text-sidebar-foreground' : 'text-sidebar-foreground'}
                           >
                             <item.icon className="h-5 w-5" />
                             {!collapsed && (
@@ -415,7 +415,7 @@ export const AppSidebar = () => {
                         className={({ isActive }) =>
                           isActive
                             ? 'bg-accent text-accent-foreground font-medium'
-                            : 'hover:bg-accent/50'
+                            : 'text-sidebar-foreground hover:bg-accent/50 hover:text-accent-foreground'
                         }
                       >
                         <item.icon className="h-5 w-5" />
