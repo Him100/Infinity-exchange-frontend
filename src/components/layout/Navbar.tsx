@@ -1,4 +1,4 @@
-import { Moon, Sun, LogOut, User, Menu, KeyRound, Mail } from 'lucide-react';
+import { Moon, Sun, LogOut, User, Menu, KeyRound } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -83,13 +83,9 @@ export const Navbar = () => {
                     <div className="flex-1">
                       <div className="font-semibold text-base">{user?.username}</div>
                       <div className="text-xs text-muted-foreground capitalize flex items-center gap-1 mt-0.5">
-                        {user?.role}
+                        {user?.userRole}
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Mail className="h-3.5 w-3.5" />
-                    <span className="truncate">{user?.email}</span>
                   </div>
                 </div>
               </DropdownMenuLabel>

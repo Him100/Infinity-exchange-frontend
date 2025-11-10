@@ -8,9 +8,13 @@ import ClientDashboard from '@/features/client/pages/ClientDashboard';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  
+  console.log('Dashboard - User:', user);
+  console.log('Dashboard - User role:', user?.userRole);
 
   const renderDashboard = () => {
-    switch (user?.role) {
+    console.log('Rendering dashboard for role:', user?.userRole);
+    switch (user?.userRole) {
       case 'SUPERADMIN':
         return <SuperAdminDashboard />;
       case 'ADMIN':

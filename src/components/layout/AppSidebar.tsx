@@ -321,15 +321,22 @@ export const AppSidebar = () => {
   const collapsed = state === 'collapsed';
   const [openMenus, setOpenMenus] = useState<Record<string, boolean>>({});
 
-  const filteredMenuItems = menuItems.filter(item =>
-    user?.role ? item.roles.includes(user.role) : false
-  );
+  console.log('Current user:', user);
+  console.log('User role:', user?.userRole);
+  
+  const filteredMenuItems = menuItems.filter(item => {
+    const hasAccess = user?.userRole ? item.roles.includes(user.userRole) : false;
+    console.log(`Menu item "${item.title}" - has access: ${hasAccess}`, item.roles);
+    return hasAccess;
+  });
 
   const filterSubItems = (subItems: SubMenuItem[] | undefined) => {
     if (!subItems) return [];
-    return subItems.filter(subItem =>
-      user?.role ? subItem.roles.includes(user.role) : false
-    );
+    return subItems.filter(subItem => {
+      const hasAccess = user?.userRole ? subItem.roles.includes(user.userRole) : false;
+      console.log(`Submenu item "${subItem.title}" - has access: ${hasAccess}`, subItem.roles);
+      return hasAccess;
+    });
   };
 
   const toggleMenu = (title: string) => {

@@ -4,7 +4,7 @@ export interface User {
   id: number;
   username: string;
   email: string;
-  role: UserRole;
+  userRole: UserRole;  // Changed from user_role to userRole to match backend
   isActive: boolean;
   isVerified: boolean;
   createdAt: string;
